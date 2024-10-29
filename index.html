@@ -118,6 +118,8 @@
             cursor: pointer; /* Pointer cursor */
             border-radius: 5px; /* Rounded corners */
             transition: background-color 0.3s ease; /* Smooth transition for hover */
+            position: relative; /* Relative position for moving */
+            z-index: 20; /* Ensure it appears above other elements */
         }
 
         #startButton:hover {
@@ -146,7 +148,10 @@
         const gunshotSound = document.getElementById('gunshot');
         const celebrationSound = document.getElementById('celebration');
         const textBox = document.getElementById('textBox'); // Get the text box
+        const startButton = document.getElementById('startButton'); // Get the button
+        let clickCount = 0; // To count button clicks
 
+        // Function to create confetti
         function createConfetti() {
             const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
             for (let i = 0; i < 100; i++) { // Create 100 confetti pieces
@@ -164,11 +169,26 @@
             }
         }
 
+        // Function to handle button click
+        function handleButtonClick() {
+            clickCount++;
+            if (clickCount < 8) {
+                // Move button around randomly
+                const randomX = Math.random() * (window.innerWidth - startButton.offsetWidth);
+                const randomY = Math.random() * (window.innerHeight - startButton.offsetHeight);
+                startButton.style.position = 'absolute';
+                startButton.style.left = randomX + 'px';
+                startButton.style.top = randomY + 'px';
+            } else {
+                // Start the main story after the 8th click
+                startStory();
+            }
+        }
+
         function startStory() {
             const image1 = document.getElementById('image1');
             const image2 = document.getElementById('image2');
             const iconImage = document.getElementById('iconImage');
-            const startButton = document.getElementById('startButton');
 
             // Update text box and show initial images (grace.jpg and mark.JPG)
             textBox.innerText = "Here comes Grace!";
@@ -214,14 +234,14 @@
                 // Move carousel (you can add your carousel movement logic here)
                 document.getElementById('container').style.animation = 'moveCarousel 1s infinite';
                 textBox.innerText = "Let's celebrate!"; // Update text box
-            }, 11000); // Adjust delay as needed
-
-            // Hide the button after it is clicked
+            }, 12000); // adjust the delay as needed
+            
+            // Hide the button after the story starts
             startButton.style.display = 'none';
         }
 
-        // Start the story on button click
-        document.getElementById('startButton').addEventListener('click', startStory);
+        // Attach click event to the button
+        startButton.addEventListener('click', handleButtonClick);
     </script>
 </body>
 </html>
